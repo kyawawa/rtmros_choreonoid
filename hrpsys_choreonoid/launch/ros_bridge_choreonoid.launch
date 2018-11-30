@@ -9,6 +9,7 @@
 
   <arg name="USE_ROBOTHARDWARE"       default="true" />
   <arg name="USE_WALKING"             default="true"  />
+  <arg name="USE_JUMP"                default="false"  />
   <arg name="USE_COLLISIONCHECK"      default="false" />
   <arg name="USE_IMPEDANCECONTROLLER" default="true"  />
   <arg name="USE_GRASPCONTROLLER"     default="false" />
@@ -20,6 +21,7 @@
   <arg name="USE_EMERGENCYSTOPPER"    default="true"  />
   <arg name="USE_REFERENCEFORCEUPDATER" default="true" />
   <arg name="USE_OBJECTCONTACTTURNAROUNDDETECTOR" default="true" />
+  <arg name="USE_BALANCER"            default="false" />
   <arg name="USE_HRPSYS_PROFILE"      default="true"  />
   <arg name="USE_VELOCITY_OUTPUT"     default="true"  />
 
@@ -32,6 +34,7 @@
     <arg name="USE_ROBOTHARDWARE" default="$(arg USE_ROBOTHARDWARE)" />
     <!-- unstable RTC -->
     <arg name="USE_WALKING"               value="$(arg USE_WALKING)" />
+    <arg name="USE_JUMP"                  value="$(arg USE_JUMP)"  />
     <arg name="USE_COLLISIONCHECK"        value="$(arg USE_COLLISIONCHECK)" />
     <arg name="USE_IMPEDANCECONTROLLER"   value="$(arg USE_IMPEDANCECONTROLLER)" />
     <arg name="USE_GRASPCONTROLLER"       value="$(arg USE_GRASPCONTROLLER)" />
@@ -43,6 +46,7 @@
     <arg name="USE_EMERGENCYSTOPPER"      value="$(arg USE_EMERGENCYSTOPPER)" />
     <arg name="USE_REFERENCEFORCEUPDATER" value="$(arg USE_REFERENCEFORCEUPDATER)" />
     <arg name="USE_OBJECTCONTACTTURNAROUNDDETECTOR" value="$(arg USE_OBJECTCONTACTTURNAROUNDDETECTOR)" />
+    <arg name="USE_BALANCER"              value="$(arg USE_BALANCER)" />
     <arg name="USE_HRPSYS_PROFILE"        value="$(arg USE_HRPSYS_PROFILE)" />
     <arg name="USE_VELOCITY_OUTPUT"       value="$(arg USE_VELOCITY_OUTPUT)" />
 

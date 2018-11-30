@@ -59,6 +59,13 @@
     <arg name="MODEL_FILE"     value="$(arg MODEL_FILE)" />
     <arg name="COLLADA_FILE"   value="$(arg COLLADA_FILE)"/>
     <arg name="CONF_FILE"      value="$(arg CONF_FILE)" />
+    <arg name="USE_WALKING"    value="false" />
+    <arg name="USE_JUMP"       value="true" />
+    <arg name="USE_IMPEDANCECONTROLLER" value="false" />
+    <arg name="USE_REFERENCEFORCEUPDATER" value="false" />
+    <arg name="USE_OBJECTCONTACTTURNAROUNDDETECTOR" value="false" />
+    <arg name="USE_EMERGENCYSTOPPER"    value="false"  />
+    <arg name="USE_BALANCER" value="true" />
   </include>
 
   <!--                     -->
