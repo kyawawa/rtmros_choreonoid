@@ -10,7 +10,7 @@
 -o manager.is_master:YES
 -o manager.modules.load_path:$(find hrpsys)/lib"
        />
-  <arg name="RESPAWN_SIMULATOR" default="true"/> <!-- use RESPAWN_SIMULATOR as START_SIMULATOR -->
+  <arg name="RESPAWN_SIMULATOR" default="false"/> <!-- use RESPAWN_SIMULATOR as START_SIMULATOR -->
   <!--arg name="START_SIMULATOR"   default="true" /-->
   <arg name="ENABLE_CONSTRAINT" default="false" />
   <arg name="OUTPUT" default="log"/>

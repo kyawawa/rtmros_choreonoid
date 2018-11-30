@@ -14,11 +14,13 @@ class CHIDORI_HrpsysConfigurator(ChoreonoidHrpsysConfigurator):
             #['vs', "VirtualForceSensor"],
             ['rmfo', "RemoveForceSensorLinkOffset"],
             ['es', "EmergencyStopper"],
-            ['rfu', "ReferenceForceUpdater"],
-            ['octd', "ObjectContactTurnaroundDetector"],
-            ['ic', "ImpedanceController"],
-            ['abc', "AutoBalancer"],
-            ['st', "Stabilizer"],
+            # ['rfu', "ReferenceForceUpdater"],
+            # ['octd', "ObjectContactTurnaroundDetector"],
+            # ['ic', "ImpedanceController"],
+            # ['abc', "AutoBalancer"],
+            # ['st', "Stabilizer"],
+            ['ba', "Balancer"],
+            # ['jc', "JumpController"],
             # ['tc', "TorqueController"],
             # ['te', "ThermoEstimator"],
             # ['tl', "ThermoLimiter"],
@@ -44,9 +46,9 @@ if __name__ == '__main__':
     [sys.argv, connect_constraint_force_logger_ports] = hcf.parse_arg_for_connect_ports(sys.argv)
     if len(sys.argv) > 2 :
         hcf.init(sys.argv[1], sys.argv[2], connect_constraint_force_logger_ports=connect_constraint_force_logger_ports)
-        hcf.startABSTIMP()
+        # hcf.startABSTIMP()
     elif len(sys.argv) > 1 :
         hcf.init(sys.argv[1], connect_constraint_force_logger_ports=connect_constraint_force_logger_ports)
-        hcf.startABSTIMP()
+        # hcf.startABSTIMP()
     else :
         hcf.init(connect_constraint_force_logger_ports=connect_constraint_force_logger_ports)

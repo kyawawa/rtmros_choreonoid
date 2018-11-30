@@ -17,6 +17,7 @@ class ChoreonoidHrpsysConfiguratorOrg(URATAHrpsysConfigurator):
             ['ic', "ImpedanceController"],
             ['abc', "AutoBalancer"],
             ['st', "Stabilizer"],
+            ['ba', "Balancer"],
             ['co', "CollisionDetector"],
             # ['tc', "TorqueController"],
             # ['te', "ThermoEstimator"],
@@ -28,8 +29,8 @@ class ChoreonoidHrpsysConfiguratorOrg(URATAHrpsysConfigurator):
     def setupLogger(self, maxlen=15000):
         HrpsysConfigurator.setupLogger(self, maxlen)
         self.connectLoggerPort(self.rh, 'WAIST') ##
-        self.connectLoggerPort(self.abc, 'rfsensor')
-        self.connectLoggerPort(self.abc, 'lfsensor')
+        # self.connectLoggerPort(self.abc, 'rfsensor')
+        # self.connectLoggerPort(self.abc, 'lfsensor')
         for pn in filter (lambda x : re.match("Trans_", x), self.rh.ports.keys()):
             self.connectLoggerPort(self.rh, pn)
         ##self.connectLoggerPort(self.abc, 'rhsensor')
