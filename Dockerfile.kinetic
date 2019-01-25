@@ -50,9 +50,13 @@ RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys 
 RUN source ${WORKHOME}/base_ws/devel/setup.bash
 
 
+## for travis
+RUN mkdir -p src/rtmros_choreonoid
+COPY . src/rtmros_choreonoid/
+
 #### ros pkg
 WORKDIR ${WORKHOME}/catkin_ws
-RUN wstool init --shallow src ./depend.rosinstall && \
+RUN wstool init --shallow src src/rtmros_choreonoid/depend.rosinstall && \
 # RUN wstool init src && \
 #     wstool set -y -t src rtmros_tutorials https://github.com/start-jsk/rtmros_tutorials.git --git && \
 # # (for compiling...)   wstool set -y -t src rtmros_common https://github.com/start-jsk/rtmros_common --git && \
@@ -66,10 +70,6 @@ RUN wstool init --shallow src ./depend.rosinstall && \
 #     (cd src/jsk_robot; rm -rf README.md jsk_baxter_robot jsk_naoqi_robot jsk_robot doc jsk_fetch_robot jsk_pr2_robot) && \
 ## remove hrpsys_gazebo, hironx, hrpsys, opnehrp3 tutorials because it cause to install ros-indigo-hrpsys
     (cd src/rtmros_tutorials; rm -rf hrpsys_gazebo_tutorials hironx_tutorial hrpsys_tutorials openhrp3_tutorials)
-
-## for travis
-RUN mkdir -p src/rtmros_choreonoid
-COPY . src/rtmros_choreonoid/
 
 # debug
 RUN ls src/rtmros_choreonoid/
