@@ -2,7 +2,7 @@
 dist: xenial
 sudo: required
 language:
-  - generic
+  - minimal
 cache:
   - apt
 services:
