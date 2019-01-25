@@ -26,36 +26,40 @@ RUN apt-get update  -q -qq && \
     libopencv-dev libsdl1.2-dev freeglut3-dev libglew-dev
 
 
-#### choreonoid
-WORKDIR ${WORKHOME}/src
-RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
-    git clone --depth 1 -b ${CNOID_BRANCH} https://github.com/s-nakaoka/choreonoid.git && \
-    mkdir -p choreonoid/build && \
-    cd choreonoid/build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=${CNOID_INSTALL_DIR} -DOPENRTM_DIR=${CNOID_RTM_DIR} -DENABLE_INSTALL_RPATH=ON -DENABLE_CORBA=ON -DBUILD_CORBA_PLUGIN=ON -DBUILD_OPENRTM_PLUGIN=ON -DUSE_BUILTIN_CAMERA_IMAGE_IDL=ON -DBUILD_BALANCER_PLUGIN=OFF -DBUILD_POSE_SEQ_PLUGIN=OFF -DENABLE_SAMPLES=OFF -DUSE_PYTHON3=OFF -DUSE_PYBIND11=OFF && \
-    make -j4 && \
-    make install
+# #### choreonoid
+# WORKDIR ${WORKHOME}/src
+# RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
+#     git clone --depth 1 -b ${CNOID_BRANCH} https://github.com/s-nakaoka/choreonoid.git && \
+#     mkdir -p choreonoid/build && \
+#     cd choreonoid/build && \
+#     cmake .. -DCMAKE_INSTALL_PREFIX=${CNOID_INSTALL_DIR} -DOPENRTM_DIR=${CNOID_RTM_DIR} -DENABLE_INSTALL_RPATH=ON -DENABLE_CORBA=ON -DBUILD_CORBA_PLUGIN=ON -DBUILD_OPENRTM_PLUGIN=ON -DUSE_BUILTIN_CAMERA_IMAGE_IDL=ON -DBUILD_BALANCER_PLUGIN=OFF -DBUILD_POSE_SEQ_PLUGIN=OFF -DENABLE_SAMPLES=OFF -DUSE_PYTHON3=OFF -DUSE_PYBIND11=OFF && \
+#     make -j4 && \
+#     make install
 
 
-#### base ros pkg, they should be replaced by deb package
-WORKDIR ${WORKHOME}/base_ws
-RUN wstool init src && \
-    wstool set -y -t src hrpsys https://github.com/fkanehiro/hrpsys-base.git --git && \
-    wstool update -t src
-RUN rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore rosdep error'
+# #### base ros pkg, they should be replaced by deb package
+# WORKDIR ${WORKHOME}/base_ws
+# RUN wstool init src && \
+#     wstool set -y -t src hrpsys https://github.com/fkanehiro/hrpsys-base.git --git && \
+#     wstool update -t src
+# RUN rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore rosdep error'
 
-# build hrpsys parallel ??
-WORKDIR ${WORKHOME}/base_ws
-RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys --no-notify -DENABLE_DOXYGEN=OFF"
-RUN source ${WORKHOME}/base_ws/devel/setup.bash
+# # build hrpsys parallel ??
+# WORKDIR ${WORKHOME}/base_ws
+# RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys --no-notify -DENABLE_DOXYGEN=OFF"
+# RUN source ${WORKHOME}/base_ws/devel/setup.bash
 
+
+#### ros pkg
+WORKDIR ${WORKHOME}/catkin_ws
 
 ## for travis
 RUN mkdir -p src/rtmros_choreonoid
 COPY . src/rtmros_choreonoid/
 
-#### ros pkg
-WORKDIR ${WORKHOME}/catkin_ws
+# debug
+RUN ls src/rtmros_choreonoid/
+
 RUN wstool init --shallow src src/rtmros_choreonoid/depend.rosinstall && \
 # RUN wstool init src && \
 #     wstool set -y -t src rtmros_tutorials https://github.com/start-jsk/rtmros_tutorials.git --git && \
@@ -71,25 +75,22 @@ RUN wstool init --shallow src src/rtmros_choreonoid/depend.rosinstall && \
 ## remove hrpsys_gazebo, hironx, hrpsys, opnehrp3 tutorials because it cause to install ros-indigo-hrpsys
     (cd src/rtmros_tutorials; rm -rf hrpsys_gazebo_tutorials hironx_tutorial hrpsys_tutorials openhrp3_tutorials)
 
-# debug
-RUN ls src/rtmros_choreonoid/
+# #RUN rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore rosdep error'
+# RUN /bin/bash -c "source ${WORKHOME}/base_ws/devel/setup.bash && rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore_rosdep_error'"
 
-#RUN rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore rosdep error'
-RUN /bin/bash -c "source ${WORKHOME}/base_ws/devel/setup.bash && rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore_rosdep_error'"
-
-## should be solved ...,  hrpsys-base, jsk_common, pr2_navigation ###
-# RUN apt-get install -q -qq -y ros-${ROS_DISTRO}-jsk-tilt-laser ros-${ROS_DISTRO}-jsk-recognition && \
-#     apt-get clean && \
-#     rm -rf /var/lib/apt/lists/
+# ## should be solved ...,  hrpsys-base, jsk_common, pr2_navigation ###
+# # RUN apt-get install -q -qq -y ros-${ROS_DISTRO}-jsk-tilt-laser ros-${ROS_DISTRO}-jsk-recognition && \
+# #     apt-get clean && \
+# #     rm -rf /var/lib/apt/lists/
 
 
-### build ros packages
-WORKDIR ${WORKHOME}/catkin_ws
-#RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify -j 1 -p 1"
-RUN /bin/bash -c "source ${WORKHOME}/base_ws/devel/setup.bash && catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify"
+# ### build ros packages
+# WORKDIR ${WORKHOME}/catkin_ws
+# #RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify -j 1 -p 1"
+# RUN /bin/bash -c "source ${WORKHOME}/base_ws/devel/setup.bash && catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify"
 
-##
-RUN /bin/bash -c "source ${WORKHOME}/catkin_ws/devel/setup.bash && rosrun roseus generate-all-msg-srv.sh geometry_msgs sensor_msgs hrpsys_ros_bridge opencv_apps"
+# ##
+# RUN /bin/bash -c "source ${WORKHOME}/catkin_ws/devel/setup.bash && rosrun roseus generate-all-msg-srv.sh geometry_msgs sensor_msgs hrpsys_ros_bridge opencv_apps"
 
 
 ## ADD ./my_entrypoint.sh /
