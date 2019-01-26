@@ -21,6 +21,8 @@ RUN apt-get update  -q -qq && \
 # hrpsys(hrputil)
     libopencv-dev libsdl1.2-dev freeglut3-dev libglew-dev
 
+# debug
+RUN ls
 
 #### choreonoid
 WORKDIR ${WORKHOME}/src
@@ -32,6 +34,8 @@ RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
     make -j4 && \
     make install
 
+# debug
+RUN ls
 
 # #### base ros pkg, they should be replaced by deb package
 # WORKDIR ${WORKHOME}/base_ws
