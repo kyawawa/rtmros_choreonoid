@@ -12,10 +12,6 @@ ENV PKG_CONFIG_PATH ${CNOID_INSTALL_DIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
 ENV CNOID_RTM_DIR /opt/ros/${ROS_DISTRO}
 ENV WORKHOME /choreonoid
 
-# FOR DEBUG
-RUN pwd
-RUN ls
-
 ### for choreonoid
 RUN apt-get update  -q -qq && \
     apt-get install -q -qq -y libyaml-dev mesa-utils python-pip \
@@ -56,9 +52,6 @@ RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
 # ## for travis
 # RUN mkdir -p src/rtmros_choreonoid
 # COPY . src/rtmros_choreonoid/
-
-# # debug
-# RUN ls src/rtmros_choreonoid/
 
 # RUN wstool init --shallow src src/rtmros_choreonoid/depend.rosinstall && \
 # # RUN wstool init src && \
