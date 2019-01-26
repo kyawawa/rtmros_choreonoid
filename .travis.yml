@@ -16,6 +16,9 @@ env:
 
 before_script:
   - mkdir -p $HOME/ccache/${DISTR}/.ccache
+  - pwd
+  - ls
+  - echo $HOME
   - docker pull ${BASEIMG}
 #  - docker build -f Dockerfile.kinetic_hrpsys --tag start-jsk/hrpsys_choreonoid:kinetic .
 
