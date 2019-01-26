@@ -12,6 +12,8 @@ ENV PKG_CONFIG_PATH ${CNOID_INSTALL_DIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
 ENV CNOID_RTM_DIR /opt/ros/${ROS_DISTRO}
 ENV WORKHOME /choreonoid
 
+COPY ./ccache/${ROS_DISTRO}/.ccache .
+
 ### for choreonoid
 RUN apt-get update  -q -qq && \
     apt-get install -q -qq -y libyaml-dev mesa-utils python-pip \
@@ -19,7 +21,12 @@ RUN apt-get update  -q -qq && \
 # choreonoid
     libyaml-dev ros-kinetic-openrtm-aist ros-kinetic-openrtm-aist-python libqt4-opengl-dev \
 # hrpsys(hrputil)
-    libopencv-dev libsdl1.2-dev freeglut3-dev libglew-dev
+    libopencv-dev libsdl1.2-dev freeglut3-dev libglew-dev \
+# ccache
+    ccache
+
+RUN ccache -M 100M
+ENV PATH $(which ccache):${PATH}
 
 # debug
 RUN ls

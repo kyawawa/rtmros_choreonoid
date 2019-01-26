@@ -6,7 +6,7 @@ language:
 cache:
   apt: true
   directories:
-    - $HOME/docker
+    - $HOME/ccache
 services:
   - docker
 
@@ -15,19 +15,17 @@ env:
   - DISTR=kinetic BASEIMG=osrf/ros:kinetic-desktop-full
 
 before_script:
+  - mkdir -p $HOME/ccache/${DISTR}/.ccache
   - docker pull ${BASEIMG}
 #  - docker build -f Dockerfile.kinetic_hrpsys --tag start-jsk/hrpsys_choreonoid:kinetic .
-  # Load cached docker images
-  - if [ -d $HOME/docker/${DISTR} ]; then ls $HOME/docker/${DISTR}/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 
 script:
-  - docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} --cache-from start-jsk/rtmros_choreonoid:${DISTR}:latest .
+  - docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} .
 
 before_cache:
-  # Save tagged docker images
-  - >
-    mkdir -p $HOME/docker/${DISTR} && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
-    | xargs -n 2 -t sh -c 'test -e $HOME/docker/${DISTR}/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/${DISTR}/$1.tar.gz'
+  - docker create --name ${DISTR} start-jsk/rtmros_choreonoid:${DISTR}
+  - rm -rf $HOME/ccache/${DISTR}/.ccache
+  - docker cp ${DISTR}:/.ccache $HOME/ccache/${DISTR}/
 
 # jobs:
 #   include:
