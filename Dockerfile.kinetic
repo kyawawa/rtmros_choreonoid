@@ -14,7 +14,7 @@ ENV WORKHOME /choreonoid
 
 ### for choreonoid
 RUN apt-get update  -q -qq && \
-    apt-get install -q -qq -y libyaml-dev mesa-utils python-pip \
+    apt-get install -q -qq -y mesa-utils python-pip wget \
     ros-${ROS_DISTRO}-catkin python-wstools python-catkin-tools \
 # choreonoid
     libyaml-dev ros-kinetic-openrtm-aist ros-kinetic-openrtm-aist-python libqt4-opengl-dev \
@@ -36,35 +36,39 @@ RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
 WORKDIR ${WORKHOME}/base_ws
 RUN wget https://api.github.com/repos/fkanehiro/hrpsys-base/git/refs/heads/master -O hrpsys-version.json --timestamping || echo 'Exceed API rate limit. Use cache.'
 RUN (mkdir -p src && cd src && git clone --depth 1 hrpsys https://github.com/fkanehiro/hrpsys-base.git) && \
-    apt-get update  -q -qq && rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore rosdep error' && \
+    apt-get update -q -qq && rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore rosdep error' && \
     source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys --no-notify -DENABLE_DOXYGEN=OFF
-RUN source ${WORKHOME}/base_ws/devel/setup.bash
-
 
 # #### ros pkg
-# WORKDIR ${WORKHOME}/catkin_ws
+WORKDIR ${WORKHOME}/catkin_ws/src
 
-# ## for travis
-# RUN mkdir -p src/rtmros_choreonoid
-# COPY . src/rtmros_choreonoid/
+RUN wget https://api.github.com/repos/start-jsk/rtmros_tutorials/git/refs/heads/master -O rtmros_tutorials-version.json --timestamping || \
+    echo 'Exceed API rate limit. Use cache.' && \
+    git clone --depth 1 https://github.com/start-jsk/rtmros_tutorials.git &&
+## remove hrpsys_gazebo, hironx, hrpsys, opnehrp3 tutorials because it cause to install ros-indigo-hrpsys
+    (cd rtmros_tutorials; rm -rf hrpsys_gazebo_tutorials hironx_tutorial hrpsys_tutorials openhrp3_tutorials)
 
-# RUN wstool init --shallow src src/rtmros_choreonoid/depend.rosinstall && \
-# # RUN wstool init src && \
-# #     wstool set -y -t src rtmros_tutorials https://github.com/start-jsk/rtmros_tutorials.git --git && \
-# # # (for compiling...)   wstool set -y -t src rtmros_common https://github.com/start-jsk/rtmros_common --git && \
-# #     wstool set -y -t src rtmros_common https://github.com/YoheiKakiuchi/rtmros_common --git -v fix_rtc_name2 && \
-# # #    wstool set -y -t src jsk_common https://github.com/jsk-ros-pkg/jsk_common.git --git && \
-# #     wstool set -y -t src pr2_navigation https://github.com/PR2/pr2_navigation.git --git && \
-# # # (install)  wstool set -y -t src rtmros_choreonoid https://github.com/start-jsk/rtmros_choreonoid --git && \
-# #     wstool update -t src && \
-# #     git clone https://github.com/jsk-ros-pkg/jsk_robot.git src/jsk_robot && \
-# # ## why?
-# #     (cd src/jsk_robot; rm -rf README.md jsk_baxter_robot jsk_naoqi_robot jsk_robot doc jsk_fetch_robot jsk_pr2_robot) && \
-# ## remove hrpsys_gazebo, hironx, hrpsys, opnehrp3 tutorials because it cause to install ros-indigo-hrpsys
-#     (cd src/rtmros_tutorials; rm -rf hrpsys_gazebo_tutorials hironx_tutorial hrpsys_tutorials openhrp3_tutorials)
+RUN wget https://api.github.com/repos/YoheiKakiuchi/rtmros_common/git/refs/heads/fix_rtc_name2 -O rtmros_common-version.json --timestamping || \
+    echo 'Exceed API rate limit. Use cache.' && \
+    git clone --depth 1 https://github.com/YoheiKakiuchi/rtmros_common -b fix_rtc_name2
 
-# #RUN rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore rosdep error'
-# RUN /bin/bash -c "source ${WORKHOME}/base_ws/devel/setup.bash && rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore_rosdep_error'"
+RUN wget https://api.github.com/repos/PR2/pr2_navigation/git/refs/heads/master -O pr2_navigation-version.json --timestamping || \
+    echo 'Exceed API rate limit. Use cache.' && \
+    git clone --depth 1 https://github.com/PR2/pr2_navigation.git
+
+RUN wget https://api.github.com/repos/jsk-ros-pkg/jsk_robot/git/refs/heads/master -O jsk_robot-version.json --timestamping || \
+    echo 'Exceed API rate limit. Use cache.' && \
+    git clone --depth 1 https://github.com/jsk-ros-pkg/jsk_robot.git &&
+## why?
+    (cd jsk_robot; rm -rf jsk_baxter_robot jsk_naoqi_robot jsk_robot doc jsk_fetch_robot jsk_pr2_robot)
+
+## for travis
+COPY . rtmros_choreonoid/
+
+WORKDIR ${WORKHOME}/catkin_ws
+
+RUN source ${WORKHOME}/base_ws/devel/setup.bash
+RUN apt-get update -q -qq && rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore_rosdep_error'
 
 # ## should be solved ...,  hrpsys-base, jsk_common, pr2_navigation ###
 # # RUN apt-get install -q -qq -y ros-${ROS_DISTRO}-jsk-tilt-laser ros-${ROS_DISTRO}-jsk-recognition && \
@@ -72,15 +76,13 @@ RUN source ${WORKHOME}/base_ws/devel/setup.bash
 # #     rm -rf /var/lib/apt/lists/
 
 
-# ### build ros packages
-# WORKDIR ${WORKHOME}/catkin_ws
-# #RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify -j 1 -p 1"
-# RUN /bin/bash -c "source ${WORKHOME}/base_ws/devel/setup.bash && catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify"
+### build ros packages
+#RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify -j 1 -p 1"
+RUN catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify
 
-# ##
-# RUN /bin/bash -c "source ${WORKHOME}/catkin_ws/devel/setup.bash && rosrun roseus generate-all-msg-srv.sh geometry_msgs sensor_msgs hrpsys_ros_bridge opencv_apps"
+## why?
+RUN source ${WORKHOME}/catkin_ws/devel/setup.bash && rosrun roseus generate-all-msg-srv.sh geometry_msgs sensor_msgs hrpsys_ros_bridge opencv_apps
 
-
-# ## ADD ./my_entrypoint.sh /
-# ## ENTRYPOINT ["/my_entrypoint.sh"]
-# ## CMD ["bash"]
+## ADD ./my_entrypoint.sh /
+## ENTRYPOINT ["/my_entrypoint.sh"]
+## CMD ["bash"]
