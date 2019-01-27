@@ -18,7 +18,7 @@ before_script:
   - mkdir -p $HOME/ccache/${DISTR}/.ccache
   - mv $HOME/ccache/${DISTR}/.ccache .
   # - pwd
-  # - ls
+  - ls .ccache
   # - echo $HOME
   - docker pull ${BASEIMG}
 #  - docker build -f Dockerfile.kinetic_hrpsys --tag start-jsk/hrpsys_choreonoid:kinetic .
