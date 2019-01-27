@@ -23,6 +23,7 @@ RUN apt-get update  -q -qq && \
 
 #### choreonoid
 WORKDIR ${WORKHOME}/src
+ADD https://api.github.com/repos/s-nakaoka/choreonoid/git/refs/heads/${CNOID_BRANCH} choreonoid-version.json
 RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
     git clone --depth 1 -b ${CNOID_BRANCH} https://github.com/s-nakaoka/choreonoid.git && \
     mkdir -p choreonoid/build && \
