@@ -28,8 +28,11 @@ RUN apt-get update  -q -qq && \
 # ccache
     ccache
 
-RUN ccache -M 100M
-ENV PATH $(which ccache):${PATH}
+RUN ccache -M 100M && \
+    ln -s $(which ccache) /usr/local/bin/gcc && \
+    ln -s $(which ccache) /usr/local/bin/g++ && \
+    ln -s $(which ccache) /usr/local/bin/cc && \
+    ln -s $(which ccache) /usr/local/bin/c++
 
 #### choreonoid
 WORKDIR ${WORKHOME}/src
