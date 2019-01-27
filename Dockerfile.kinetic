@@ -14,7 +14,7 @@ ENV WORKHOME /choreonoid
 
 WORKDIR ${WORKHOME}
 RUN ls
-COPY /home/travis/ccache/${ROS_DISTRO}/.ccache .
+COPY .ccache .
 
 ### for choreonoid
 RUN apt-get update  -q -qq && \
