@@ -23,7 +23,7 @@ RUN apt-get update  -q -qq && \
 
 #### choreonoid
 WORKDIR ${WORKHOME}/src
-ADD https://api.github.com/repos/s-nakaoka/choreonoid/git/refs/heads/${CNOID_BRANCH} choreonoid-version.json
+ADD https://api.github.com/repos/s-nakaoka/choreonoid/git/refs/heads/${CNOID_BRANCH} choreonoid-version.json || echo 'Exceed API rate limit. Use cache'
 RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
     git clone --depth 1 -b ${CNOID_BRANCH} https://github.com/s-nakaoka/choreonoid.git && \
     mkdir -p choreonoid/build && \
@@ -33,14 +33,12 @@ RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
     make install
 
 #### base ros pkg, they should be replaced by deb package
-# WORKDIR ${WORKHOME}/base_ws
-# ADD https://api.github.com/repos/fkanehiro/hrpsys-base/git/refs/heads/master hrpsys-version.json
-# RUN wstool init src && \
-#     wstool set -y -t src hrpsys https://github.com/fkanehiro/hrpsys-base.git --git && \
-#     wstool update -t src
-# RUN apt-get update  -q -qq && rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore rosdep error'
-# RUN source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys --no-notify -DENABLE_DOXYGEN=OFF
-# RUN source ${WORKHOME}/base_ws/devel/setup.bash
+WORKDIR ${WORKHOME}/base_ws
+ADD https://api.github.com/repos/fkanehiro/hrpsys-base/git/refs/heads/master hrpsys-version.json || echo 'Exceed API rate limit. Use cache'
+RUN (cd src && git clone --depth 1 hrpsys https://github.com/fkanehiro/hrpsys-base.git) && \
+    apt-get update  -q -qq && rosdep install -y -r --from-paths src --ignore-src || echo 'Ignore rosdep error' && \
+    source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys --no-notify -DENABLE_DOXYGEN=OFF
+RUN source ${WORKHOME}/base_ws/devel/setup.bash
 
 
 # #### ros pkg
