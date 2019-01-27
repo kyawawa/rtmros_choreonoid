@@ -21,21 +21,15 @@ RUN apt-get update  -q -qq && \
 # hrpsys(hrputil)
     libopencv-dev libsdl1.2-dev freeglut3-dev libglew-dev
 
-# debug
-RUN ls
-
 #### choreonoid
-WORKDIR ${WORKHOME}/src
-RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
-    git clone --depth 1 -b ${CNOID_BRANCH} https://github.com/s-nakaoka/choreonoid.git && \
-    mkdir -p choreonoid/build && \
-    cd choreonoid/build && \
-    cmake .. -DCMAKE_INSTALL_PREFIX=${CNOID_INSTALL_DIR} -DOPENRTM_DIR=${CNOID_RTM_DIR} -DENABLE_INSTALL_RPATH=ON -DENABLE_CORBA=ON -DBUILD_CORBA_PLUGIN=ON -DBUILD_OPENRTM_PLUGIN=ON -DUSE_BUILTIN_CAMERA_IMAGE_IDL=ON -DBUILD_BALANCER_PLUGIN=OFF -DBUILD_POSE_SEQ_PLUGIN=OFF -DENABLE_SAMPLES=OFF -DUSE_PYTHON3=OFF -DUSE_PYBIND11=OFF && \
-    make -j4 && \
-    make install
-
-# debug
-RUN ls
+# WORKDIR ${WORKHOME}/src
+# RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
+#     git clone --depth 1 -b ${CNOID_BRANCH} https://github.com/s-nakaoka/choreonoid.git && \
+#     mkdir -p choreonoid/build && \
+#     cd choreonoid/build && \
+#     cmake .. -DCMAKE_INSTALL_PREFIX=${CNOID_INSTALL_DIR} -DOPENRTM_DIR=${CNOID_RTM_DIR} -DENABLE_INSTALL_RPATH=ON -DENABLE_CORBA=ON -DBUILD_CORBA_PLUGIN=ON -DBUILD_OPENRTM_PLUGIN=ON -DUSE_BUILTIN_CAMERA_IMAGE_IDL=ON -DBUILD_BALANCER_PLUGIN=OFF -DBUILD_POSE_SEQ_PLUGIN=OFF -DENABLE_SAMPLES=OFF -DUSE_PYTHON3=OFF -DUSE_PYBIND11=OFF && \
+#     make -j4 && \
+#     make install
 
 # #### base ros pkg, they should be replaced by deb package
 # WORKDIR ${WORKHOME}/base_ws
