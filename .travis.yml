@@ -21,7 +21,8 @@ before_script:
   - if [ -d $HOME/docker/${DISTR} ]; then ls $HOME/docker/${DISTR}/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 
 script:
-  - docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} --cache-from start-jsk/rtmros_choreonoid:${DISTR}:latest .
+  - docker --version
+  # - docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} --cache-from start-jsk/rtmros_choreonoid:${DISTR}:latest .
 
 before_cache:
   # Save tagged docker images
