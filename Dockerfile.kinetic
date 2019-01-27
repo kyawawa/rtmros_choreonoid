@@ -44,7 +44,7 @@ WORKDIR ${WORKHOME}/catkin_ws/src
 
 RUN wget https://api.github.com/repos/start-jsk/rtmros_tutorials/git/refs/heads/master -O rtmros_tutorials-version.json --timestamping || \
     echo 'Exceed API rate limit. Use cache.' && \
-    git clone --depth 1 https://github.com/start-jsk/rtmros_tutorials.git &&
+    git clone --depth 1 https://github.com/start-jsk/rtmros_tutorials.git && \
 ## remove hrpsys_gazebo, hironx, hrpsys, opnehrp3 tutorials because it cause to install ros-indigo-hrpsys
     (cd rtmros_tutorials; rm -rf hrpsys_gazebo_tutorials hironx_tutorial hrpsys_tutorials openhrp3_tutorials)
 
@@ -58,7 +58,7 @@ RUN wget https://api.github.com/repos/PR2/pr2_navigation/git/refs/heads/master -
 
 RUN wget https://api.github.com/repos/jsk-ros-pkg/jsk_robot/git/refs/heads/master -O jsk_robot-version.json --timestamping || \
     echo 'Exceed API rate limit. Use cache.' && \
-    git clone --depth 1 https://github.com/jsk-ros-pkg/jsk_robot.git &&
+    git clone --depth 1 https://github.com/jsk-ros-pkg/jsk_robot.git && \
 ## why?
     (cd jsk_robot; rm -rf jsk_baxter_robot jsk_naoqi_robot jsk_robot doc jsk_fetch_robot jsk_pr2_robot)
 
