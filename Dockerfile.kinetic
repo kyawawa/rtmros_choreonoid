@@ -14,9 +14,6 @@ ENV CNOID_RTM_DIR /opt/ros/${ROS_DISTRO}
 ENV HOME /root
 ENV WORKHOME /choreonoid
 
-WORKDIR ${HOME}
-COPY .ccache .
-
 ### for choreonoid
 RUN apt-get update  -q -qq && \
     apt-get install -q -qq -y libyaml-dev mesa-utils python-pip \
@@ -28,6 +25,8 @@ RUN apt-get update  -q -qq && \
 # ccache
     ccache
 
+WORKDIR ${HOME}
+COPY .ccache .
 RUN ccache -M 300M && \
     ln -s $(which ccache) /usr/local/bin/gcc && \
     ln -s $(which ccache) /usr/local/bin/g++ && \
