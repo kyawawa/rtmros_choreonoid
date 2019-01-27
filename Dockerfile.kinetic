@@ -90,7 +90,7 @@ RUN /bin/bash -c "source ${WORKHOME}/base_ws/devel/setup.bash && rosdep install 
 ### build ros packages
 WORKDIR ${WORKHOME}/catkin_ws
 #RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify -j 1 -p 1"
-RUN /bin/bash -c "source ${WORKHOME}/base_ws/devel/setup.bash && catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify"
+RUN /bin/bash -c "source ${WORKHOME}/base_ws/devel/setup.bash && catkin build hrpsys_choreonoid_tutorials jsk_robot_startup --no-status --no-notify"
 
 ##
 RUN /bin/bash -c "source ${WORKHOME}/catkin_ws/devel/setup.bash && rosrun roseus generate-all-msg-srv.sh geometry_msgs sensor_msgs hrpsys_ros_bridge opencv_apps"

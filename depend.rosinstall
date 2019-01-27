@@ -6,8 +6,5 @@
     uri: https://github.com/YoheiKakiuchi/rtmros_common
     version: fix_rtc_name2
 - git:
-    local-name: pr2_navigation
-    uri: https://github.com/PR2/pr2_navigation.git
-- git:
     local-name: jsk_robot
     uri: https://github.com/jsk-ros-pkg/jsk_robot.git
