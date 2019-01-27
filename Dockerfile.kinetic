@@ -12,39 +12,32 @@ ENV PKG_CONFIG_PATH ${CNOID_INSTALL_DIR}/lib/pkgconfig:${PKG_CONFIG_PATH}
 ENV CNOID_RTM_DIR /opt/ros/${ROS_DISTRO}
 ENV WORKHOME /choreonoid
 
-WORKDIR ${WORKHOME}
-RUN ls
+WORKDIR ${HOME}
 COPY .ccache .
-RUN pwd
-RUN echo $HOME
 
-# ### for choreonoid
-# RUN apt-get update  -q -qq && \
-#     apt-get install -q -qq -y libyaml-dev mesa-utils python-pip \
-#     ros-${ROS_DISTRO}-catkin python-wstools python-catkin-tools \
-# # choreonoid
-#     libyaml-dev ros-kinetic-openrtm-aist ros-kinetic-openrtm-aist-python libqt4-opengl-dev \
-# # hrpsys(hrputil)
-#     libopencv-dev libsdl1.2-dev freeglut3-dev libglew-dev \
-# # ccache
-#     ccache
+### for choreonoid
+RUN apt-get update  -q -qq && \
+    apt-get install -q -qq -y libyaml-dev mesa-utils python-pip \
+    ros-${ROS_DISTRO}-catkin python-wstools python-catkin-tools \
+# choreonoid
+    libyaml-dev ros-kinetic-openrtm-aist ros-kinetic-openrtm-aist-python libqt4-opengl-dev \
+# hrpsys(hrputil)
+    libopencv-dev libsdl1.2-dev freeglut3-dev libglew-dev \
+# ccache
+    ccache
 
-RUN apt update -qq && apt install -qq -y ccache
 RUN ccache -M 100M
 ENV PATH $(which ccache):${PATH}
 
-# debug
-RUN ls -a $HOME
-
-# #### choreonoid
-# WORKDIR ${WORKHOME}/src
-# RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
-#     git clone --depth 1 -b ${CNOID_BRANCH} https://github.com/s-nakaoka/choreonoid.git && \
-#     mkdir -p choreonoid/build && \
-#     cd choreonoid/build && \
-#     cmake .. -DCMAKE_INSTALL_PREFIX=${CNOID_INSTALL_DIR} -DOPENRTM_DIR=${CNOID_RTM_DIR} -DENABLE_INSTALL_RPATH=ON -DENABLE_CORBA=ON -DBUILD_CORBA_PLUGIN=ON -DBUILD_OPENRTM_PLUGIN=ON -DUSE_BUILTIN_CAMERA_IMAGE_IDL=ON -DBUILD_BALANCER_PLUGIN=OFF -DBUILD_POSE_SEQ_PLUGIN=OFF -DENABLE_SAMPLES=OFF -DUSE_PYTHON3=OFF -DUSE_PYBIND11=OFF && \
-#     make -j4 && \
-#     make install
+#### choreonoid
+WORKDIR ${WORKHOME}/src
+RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
+    git clone --depth 1 -b ${CNOID_BRANCH} https://github.com/s-nakaoka/choreonoid.git && \
+    mkdir -p choreonoid/build && \
+    cd choreonoid/build && \
+    cmake .. -DCMAKE_INSTALL_PREFIX=${CNOID_INSTALL_DIR} -DOPENRTM_DIR=${CNOID_RTM_DIR} -DENABLE_INSTALL_RPATH=ON -DENABLE_CORBA=ON -DBUILD_CORBA_PLUGIN=ON -DBUILD_OPENRTM_PLUGIN=ON -DUSE_BUILTIN_CAMERA_IMAGE_IDL=ON -DBUILD_BALANCER_PLUGIN=OFF -DBUILD_POSE_SEQ_PLUGIN=OFF -DENABLE_SAMPLES=OFF -DUSE_PYTHON3=OFF -DUSE_PYBIND11=OFF && \
+    make -j4 && \
+    make install
 
 # # debug
 # RUN ls

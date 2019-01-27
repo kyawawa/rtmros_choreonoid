@@ -17,9 +17,9 @@ env:
 before_script:
   - mkdir -p $HOME/ccache/${DISTR}/.ccache
   - mv $HOME/ccache/${DISTR}/.ccache .
-  - pwd
-  - ls
-  - echo $HOME
+  # - pwd
+  # - ls
+  # - echo $HOME
   - docker pull ${BASEIMG}
 #  - docker build -f Dockerfile.kinetic_hrpsys --tag start-jsk/hrpsys_choreonoid:kinetic .
 
@@ -27,11 +27,10 @@ script:
   - docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} .
 
 before_cache:
-  - ls
+  # - ls
   - docker create --name ${DISTR} start-jsk/rtmros_choreonoid:${DISTR}
-  - docker ps -a
-  # - rm -rf $HOME/ccache/${DISTR}/.ccache
-  - docker cp ${DISTR}:~/.ccache $HOME/ccache/${DISTR}/
+  # - docker ps -a
+  - docker cp ${DISTR}:/root/.ccache $HOME/ccache/${DISTR}/
 
 # jobs:
 #   include:
