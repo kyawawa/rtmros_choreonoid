@@ -28,9 +28,9 @@ script:
 
 before_cache:
   - docker create --name ${DISTR} start-jsk/rtmros_choreonoid:${DISTR}
+  - docker ps
   # - rm -rf $HOME/ccache/${DISTR}/.ccache
-  - mv .ccache $HOME/ccache/${DISTR}/
-  - docker cp ${DISTR}:.ccache $HOME/ccache/${DISTR}/
+  - docker cp ${DISTR}:~/.ccache $HOME/ccache/${DISTR}/
 
 # jobs:
 #   include:
