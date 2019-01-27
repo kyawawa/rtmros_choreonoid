@@ -29,7 +29,7 @@ RUN echo $HOME
 # # ccache
 #     ccache
 
-RUN apt install ccache
+RUN apt update -qq && apt install -qq -y ccache
 RUN ccache -M 100M
 ENV PATH $(which ccache):${PATH}
 

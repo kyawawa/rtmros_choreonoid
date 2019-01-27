@@ -27,6 +27,7 @@ script:
   - docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} .
 
 before_cache:
+  - ls
   - docker create --name ${DISTR} start-jsk/rtmros_choreonoid:${DISTR}
   - docker ps -a
   # - rm -rf $HOME/ccache/${DISTR}/.ccache
