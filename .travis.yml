@@ -31,13 +31,10 @@ script:
 before_cache:
   # Save tagged docker images
   - mkdir -p $HOME/docker/${DISTR}
-  - cache_threshold=$(date "+%Y%m%d %H:%M")
+  - rm -f $HOME/docker/${DISTR}/*.tar.gz
   - |
     docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep start-jsk | \
-    xargs -n 2 -t sh -c 'if [ -e $HOME/docker/${DISTR}/$1.tar.gz ]; then \
-    touch $HOME/docker/${DISTR}/$1.tar.gz; \
-    else docker save $0 | gzip -2 > $HOME/docker/${DISTR}/$1.tar.gz; fi'
-  - find $HOME/docker/${DISTR}/. \! -newermt "$cache_threshold" -name *.tar.gz | xargs rm -rf
+    xargs -n 2 -t sh -c 'docker save $0 | gzip -2 > $HOME/docker/${DISTR}/$1.tar.gz'
 
 # jobs:
 #   include:
