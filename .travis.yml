@@ -17,7 +17,7 @@ env:
   - DISTR=kinetic BASEIMG=osrf/ros:kinetic-desktop-full
 
 before_script:
-  # - docker pull ${BASEIMG}
+  - docker pull ${BASEIMG}
 #  - docker build -f Dockerfile.kinetic_hrpsys --tag start-jsk/hrpsys_choreonoid:kinetic .
   # Load cached docker images
   - if [ -d $HOME/docker/${DISTR} ]; then ls $HOME/docker/${DISTR}/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
@@ -25,7 +25,7 @@ before_script:
 script:
   # Set timeout to 40 minutes to save cache
   - echo hoge
-  # - timeout 1 docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} --cache-from start-jsk/rtmros_choreonoid:${DISTR} .
+  - timeout 1 docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} --cache-from start-jsk/rtmros_choreonoid:${DISTR} .
 
 before_cache:
   # Save tagged docker images
