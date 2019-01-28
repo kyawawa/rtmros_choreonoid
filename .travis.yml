@@ -23,9 +23,8 @@ before_script:
   - if [ -d $HOME/docker/${DISTR} ]; then ls $HOME/docker/${DISTR}/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
 
 script:
-  # Set timeout to 40 minutes
-  - |
-    timeout 1 docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} --cache-from start-jsk/rtmros_choreonoid:${DISTR} .
+  # Set timeout to 40 minutes to save cache
+  - timeout 2400 docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} --cache-from start-jsk/rtmros_choreonoid:${DISTR} .
 
 before_cache:
   # Save tagged docker images
