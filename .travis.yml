@@ -26,7 +26,7 @@ script:
   # Set timeout to 40 minutes
   - |
     timeout 2400 docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} --cache-from start-jsk/rtmros_choreonoid:${DISTR} . || \
-    echo 'Time out. Kill docker build to save cache.'
+    echo 'Time out. Kill docker build to save cache.'; exit 1
 
 before_cache:
   # Save tagged docker images

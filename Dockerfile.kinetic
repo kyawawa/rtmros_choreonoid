@@ -23,6 +23,7 @@ RUN apt-get update  -q -qq && \
 
 #### choreonoid
 WORKDIR ${WORKHOME}/src
+## To avoid using cache though remote repository is updated.
 RUN wget https://api.github.com/repos/s-nakaoka/choreonoid/git/refs/heads/${CNOID_BRANCH} -O choreonoid-version.json --timestamping || echo 'Exceed API rate limit. Use cache.'
 RUN source /opt/ros/$ROS_DISTRO/setup.bash && \
     git clone --depth 1 -b ${CNOID_BRANCH} https://github.com/s-nakaoka/choreonoid.git && \
@@ -80,7 +81,7 @@ RUN apt-get update -q -qq && rosdep install -y -r --from-paths src --ignore-src 
 #RUN /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash && catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify -j 1 -p 1"
 RUN catkin build hrpsys_choreonoid_tutorials jsk_robot_startup pr2_navigation_self_filter --no-status --no-notify
 
-## why?
+## Need?
 RUN source ${WORKHOME}/catkin_ws/devel/setup.bash && rosrun roseus generate-all-msg-srv.sh geometry_msgs sensor_msgs hrpsys_ros_bridge opencv_apps
 
 ## ADD ./my_entrypoint.sh /
