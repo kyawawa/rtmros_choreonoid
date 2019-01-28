@@ -24,15 +24,13 @@ before_script:
 
 script:
   # Set timeout to 40 minutes to save cache
-  - timeout 2400 docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} --cache-from start-jsk/rtmros_choreonoid:${DISTR} .
+  - timeout 1 docker build -f Dockerfile.${DISTR} --tag start-jsk/rtmros_choreonoid:${DISTR} --cache-from start-jsk/rtmros_choreonoid:${DISTR} .
 
 before_cache:
   # Save tagged docker images
   - mkdir -p $HOME/docker/${DISTR}
   - rm -f $HOME/docker/${DISTR}/*.tar.gz
-  - |
-    docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep start-jsk | \
-    xargs -n 2 -t sh -c 'docker save $0 | gzip -2 > $HOME/docker/${DISTR}/$1.tar.gz'
+  - docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}' | grep start-jsk | xargs -n 2 -t sh -c 'docker save $0 | gzip -2 > $HOME/docker/${DISTR}/$1.tar.gz'
 
 # jobs:
 #   include:
